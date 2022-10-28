@@ -1,27 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <GameScene msg="Welcome to Your Vue.js + TypeScript App" />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import HelloWorld from "./components/HelloWorld.vue";
+import GameScene from "./components/GameScene.vue";
 
 @Options({
   components: {
-    HelloWorld,
+    GameScene,
   },
 })
 export default class App extends Vue {}
 </script>
 
 <style>
+body {
+  margin: 0;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  -ms-user-select: none; 
+  -moz-user-select: none; 
+  -webkit-user-select: none; 
+  user-select: none; 
 }
 </style>
