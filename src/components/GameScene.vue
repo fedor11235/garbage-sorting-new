@@ -4,26 +4,36 @@
       <div  class="game__title">Выберите правильный бак для сортировки мусора</div>
       <ScoreLabel class="game__successful-attempts" type="ok" />
       <ScoreLabel class="game__unsuccessful-attempts" type="no" />
+        <StopwatchItem  class="game__stopwatch"/>
       <div class="wasteboxes">
         <div>
           <div class="wasteboxes__title wasteboxes__title_yellow">Вторсырье</div>
-          <WasteItem type="yellow" />
+          <WasteItem type="yellow" @item-drop="handlerItemDrop" />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_green">Смешанные</div>
-          <WasteItem type="green" />
+          <WasteItem type="green" @item-drop="handlerItemDrop" />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_blue">Бытовые</div>
-          <WasteItem type="blue" />
+          <WasteItem type="blue" @item-drop="handlerItemDrop" />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_red">Вторсырье</div>
-          <WasteItem type="red" />
+          <WasteItem type="red" @item-drop="handlerItemDrop" />
         </div>
       </div>
+      <div class="game__animation">
+        <div class="game__item" ref="itemСontainerBackground">
+          <div class="game__background" ref="itemBackground"></div>
+        </div>
+        <div class="game__item game__item_animation" ref="itemСontainerTrash">
+          <div class="game__trash" ref="itemTrash"></div>
+        </div>
       </div>
     </div>
+    <!-- <GameModal v-if="!$store.state.gameProcessed" /> -->
+  </div>
 </template>
 
 <script lang="ts">
@@ -32,31 +42,18 @@ import { defineComponent } from "vue";
 import { mapState, mapMutations } from "vuex";
 import WasteItem from "@/components/WasteItem.vue";
 import ScoreLabel from "@/components/ScoreLabel.vue";
+import StopwatchItem from "@/components/StopwatchItem.vue";
+import GameModal from "@/components/GameModal.vue";
 export default defineComponent({
   components: {
     WasteItem,
-    ScoreLabel
+    ScoreLabel,
+    StopwatchItem,
+    GameModal
   },
   data() {
     return {
-      dragObject: {
-        elem: null,
-        offsetLeft: 0,
-        offsetTop: 0,
-      },
-      garbageList: [] as any,
-      trashList: [
-        { type: "plastic", ref: "trachPlastic", color: "red" },
-        { type: "paper", ref: "trachPaper", color: "green" },
-        { type: "glass", ref: "trachGlass", color: "yellow" },
-      ],
-      mooveX: 0,
-      mooveY: 0,
-      garbageWidth: 80,
-      garbageHeight: 40,
-      garbageMinAmount: 15,
-      garbageMaxAmount: 25,
-      garbageEndТumber: 0,
+      timeDrop: 600,
     };
   },
   computed: {
@@ -70,6 +67,28 @@ export default defineComponent({
       scoreIncrease: "SCORE_INCREASE",
       scoreDecrease: "SCORE_DECREASE",
     }),
+    handlerItemDrop(e: any) {
+      this.animationItemStart(e)
+      setTimeout(() => { this.animationItemEnd(e) }, this.timeDrop);
+    },
+    animationItemStart(type: any) {
+      (this.$refs.itemСontainerBackground as any).classList.add(`drop_${type}`);
+      (this.$refs.itemBackground as any).style.height="10px";
+      (this.$refs.itemBackground as any).style.width="10px";
+
+      (this.$refs.itemСontainerTrash as any).classList.add(`drop_${type}`);
+      (this.$refs.itemTrash as any).style.height="10px";
+      (this.$refs.itemTrash as any).style.width="10px";
+    },
+    animationItemEnd(type: any) {
+      (this.$refs.itemСontainerBackground as any).classList.remove(`drop_${type}`);
+      (this.$refs.itemBackground as any).style.height="173px";
+      (this.$refs.itemBackground as any).style.width="173px";
+
+      (this.$refs.itemСontainerTrash as any).classList.remove(`drop_${type}`);
+      (this.$refs.itemTrash as any).style.height="60px";
+      (this.$refs.itemTrash as any).style.width="60px";
+    }
   },
 });
 </script>
@@ -113,6 +132,95 @@ export default defineComponent({
   position: absolute;
   top: 180px;
   right: 44px;
+}
+
+.game__animation {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 403px;
+}
+
+.game__item {
+  position: absolute;
+  top: 104px;
+  left: 222px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 173px;
+  height: 173px;
+  border-radius: 50%;
+  animation-duration: 3s;
+  transition: transform 600ms;
+}
+.game__background {
+    border-radius: 50%;
+    width: 173px;
+    height: 173px;
+    background-color:red;
+    transition: width 200ms, height 200ms;
+}
+
+.game__trash {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  background-color:green;
+  transition: width 200ms, height 200ms;
+}
+
+.game__item_animation {
+  transition: transform 300ms !important;
+}
+
+.drop_yellow {
+  transform: translate(-186px, 230px);
+  -webkit-transform: translate(-186px, 230px);
+  -o-transform: translate(-186px, 230px);
+  -moz-transform: translate(-186px, 230px);
+}
+
+.drop_green {
+  transform: translate(-64px, 230px);
+  -webkit-transform: translate(-64px, 230px);
+  -o-transform: translate(-64px, 230px);
+  -moz-transform: translate(-64px, 230px);
+}
+
+.drop_blue {
+  transform: translate(54px, 230px);
+  -webkit-transform: translate(54px, 230px);
+  -o-transform: translate(54px, 230px);
+  -moz-transform: translate(54px, 230px);
+}
+
+.drop_red {
+  transform: translate(172px, 230px);
+  -webkit-transform: translate(172px, 230px);
+  -o-transform: translate(172px, 230px);
+  -moz-transform: translate(172px, 230px);
+}
+
+
+/* @keyframes drop {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+} */
+
+.game__stopwatch {
+  position: absolute;
+  top: 84px;
+  left: 202px;
 }
 
 .wasteboxes {

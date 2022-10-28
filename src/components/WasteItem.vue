@@ -31,6 +31,7 @@ export default defineComponent({
     methods: {
         handlerClick() {
             (this.$refs.wastetop as any).style.bottom = '-10px'
+            this.$emit('itemDrop', this.type)
             setTimeout(() => (this.$refs.wastetop as any).style.bottom = '-56px', this.timeClosing)
         }
     }

@@ -6,9 +6,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent } from "vue";
-import { mapState, mapMutations } from "vuex";
 
 export default defineComponent({
     props: {
