@@ -1,6 +1,9 @@
 <template>
   <div class="scene">
     <div class="game">
+      <div  class="game__title">Выберите правильный бак для сортировки мусора</div>
+      <ScoreLabel class="game__successful-attempts" type="ok" />
+      <ScoreLabel class="game__unsuccessful-attempts" type="no" />
       <div class="wasteboxes">
         <div>
           <div class="wasteboxes__title wasteboxes__title_yellow">Вторсырье</div>
@@ -11,7 +14,7 @@
           <WasteItem type="green" />
         </div>
         <div>
-          <div class="wasteboxes__title wasteboxes__title_blue">Вторсырье</div>
+          <div class="wasteboxes__title wasteboxes__title_blue">Бытовые</div>
           <WasteItem type="blue" />
         </div>
         <div>
@@ -19,21 +22,6 @@
           <WasteItem type="red" />
         </div>
       </div>
-        <!-- <img
-          class="wastebox"
-          src="@/assets/img/bucks/wastebox_green.png"
-          alt="wastebox_green"
-        />
-        <img
-          class="wastebox"
-          src="@/assets/img/bucks/wastebox_blue.png"
-          alt="wastebox_blue"
-        />
-        <img
-          class="wastebox"
-          src="@/assets/img/bucks/wastebox_red.png"
-          alt="wastebox_red"
-        /> -->
       </div>
     </div>
 </template>
@@ -43,9 +31,11 @@
 import { defineComponent } from "vue";
 import { mapState, mapMutations } from "vuex";
 import WasteItem from "@/components/WasteItem.vue";
+import ScoreLabel from "@/components/ScoreLabel.vue";
 export default defineComponent({
   components: {
-    WasteItem
+    WasteItem,
+    ScoreLabel
   },
   data() {
     return {
@@ -100,6 +90,29 @@ export default defineComponent({
   height: 486px;
   background: white;
   border-radius: 26px;
+}
+
+.game__title {
+  width: 342px;
+  color:#1a2674;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin: auto;
+  margin-top: 12px;
+  line-height: 32px;
+}
+
+.game__successful-attempts {
+  position: absolute;
+  top: 180px;
+  left: 44px;
+}
+
+.game__unsuccessful-attempts {
+  position: absolute;
+  top: 180px;
+  right: 44px;
 }
 
 .wasteboxes {
