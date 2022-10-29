@@ -10,14 +10,14 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    SCORE_INCREASE(state) {
+    SCORE_INCREMENT_SUCCESSFUL(state) {
         state.scoreSuccessful ++;
     },
-    SCORE_DECREASE(state) {
-      state.scoreSuccessful --;
+    SCORE_INCREMENT_UNSUCCESSFUL(state) {
+      state.scoreUnsuccessful ++;
     },
     SCORE_DEFAULT(state) {
-      if (state.scoreSuccessful === 0) return;
+      if (state.scoreSuccessful === 0 && state.scoreUnsuccessful===0) return;
       state.scoreSuccessful = 0;
     },
     GAME_START(state) {

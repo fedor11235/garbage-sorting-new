@@ -8,52 +8,50 @@
       <div class="wasteboxes">
         <div>
           <div class="wasteboxes__title wasteboxes__title_yellow">Вторсырье</div>
-          <WasteItem type="yellow" @item-drop="handlerItemDrop" />
+          <WasteItem type="yellow" @item-drop="handlerItemDrop" :trash-active="trashActive" />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_green">Смешанные</div>
-          <WasteItem type="green" @item-drop="handlerItemDrop" />
+          <WasteItem type="green" @item-drop="handlerItemDrop" :trash-active="trashActive" />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_blue">Бытовые</div>
-          <WasteItem type="blue" @item-drop="handlerItemDrop" />
+          <WasteItem type="blue" @item-drop="handlerItemDrop" :trash-active="trashActive" />
         </div>
         <div>
-          <div class="wasteboxes__title wasteboxes__title_red">Вторсырье</div>
-          <WasteItem type="red" @item-drop="handlerItemDrop" />
+          <div class="wasteboxes__title wasteboxes__title_red">Опасные</div>
+          <WasteItem type="red" @item-drop="handlerItemDrop" :trash-active="trashActive" />
         </div>
       </div>
-      <div class="game__animation">
-        <div class="game__item" ref="itemСontainerBackground">
-          <div class="game__background" ref="itemBackground"></div>
-        </div>
-        <div class="game__item game__item_animation" ref="itemСontainerTrash">
-          <div class="game__trash" ref="itemTrash"></div>
-        </div>
-      </div>
+      <TrashItem :key="renderComponent" :typeDrop="typeDrop" ref="trashItem" @trash-active="(e: any) => trashActive = e"/>
     </div>
     <!-- <GameModal v-if="!$store.state.gameProcessed" /> -->
   </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent } from "vue";
 import { mapState, mapMutations } from "vuex";
 import WasteItem from "@/components/WasteItem.vue";
 import ScoreLabel from "@/components/ScoreLabel.vue";
 import StopwatchItem from "@/components/StopwatchItem.vue";
 import GameModal from "@/components/GameModal.vue";
+import TrashItem from "@/components/TrashItem.vue";
 export default defineComponent({
   components: {
     WasteItem,
     ScoreLabel,
     StopwatchItem,
-    GameModal
+    GameModal,
+    TrashItem
   },
   data() {
     return {
+      trashType: ['yellow', 'green', 'blue', 'red'],
       timeDrop: 600,
+      typeDrop: {} as {color: String, type: String},
+      renderComponent: 0,
+      trashActive: false
     };
   },
   computed: {
@@ -68,32 +66,20 @@ export default defineComponent({
       scoreDecrease: "SCORE_DECREASE",
     }),
     handlerItemDrop(e: any) {
-      this.animationItemStart(e)
-      setTimeout(() => { this.animationItemEnd(e) }, this.timeDrop);
+      this.typeDrop = e
+      setTimeout(() => {
+        this.renderComponent = this.renderComponent === 0 ? 1 : 0;
+        this.typeDrop = {
+          type: '',
+          color: ''
+        }
+       }, this.timeDrop);
     },
-    animationItemStart(type: any) {
-      (this.$refs.itemСontainerBackground as any).classList.add(`drop_${type}`);
-      (this.$refs.itemBackground as any).style.height="10px";
-      (this.$refs.itemBackground as any).style.width="10px";
-
-      (this.$refs.itemСontainerTrash as any).classList.add(`drop_${type}`);
-      (this.$refs.itemTrash as any).style.height="10px";
-      (this.$refs.itemTrash as any).style.width="10px";
-    },
-    animationItemEnd(type: any) {
-      (this.$refs.itemСontainerBackground as any).classList.remove(`drop_${type}`);
-      (this.$refs.itemBackground as any).style.height="173px";
-      (this.$refs.itemBackground as any).style.width="173px";
-
-      (this.$refs.itemСontainerTrash as any).classList.remove(`drop_${type}`);
-      (this.$refs.itemTrash as any).style.height="60px";
-      (this.$refs.itemTrash as any).style.width="60px";
-    }
   },
 });
 </script>
 
-<style>
+<style scoped>
 .scene {
   display: flex;
   align-items: center;
@@ -132,48 +118,6 @@ export default defineComponent({
   position: absolute;
   top: 180px;
   right: 44px;
-}
-
-.game__animation {
-  position: absolute;
-  overflow: hidden;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 403px;
-}
-
-.game__item {
-  position: absolute;
-  top: 104px;
-  left: 222px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 173px;
-  height: 173px;
-  border-radius: 50%;
-  animation-duration: 3s;
-  transition: transform 600ms;
-}
-.game__background {
-    border-radius: 50%;
-    width: 173px;
-    height: 173px;
-    background-color:red;
-    transition: width 200ms, height 200ms;
-}
-
-.game__trash {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  background-color:green;
-  transition: width 200ms, height 200ms;
-}
-
-.game__item_animation {
-  transition: transform 300ms !important;
 }
 
 .drop_yellow {
