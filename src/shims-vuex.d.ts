@@ -1,16 +1,15 @@
-import { ComponentCustomProperties } from 'vue'
-import { Store } from 'vuex'
+import { ComponentCustomProperties } from "vue";
+import { Store } from "vuex";
 
-declare module '@vue/runtime-core' {
-
+declare module "@vue/runtime-core" {
   interface State {
-    count: number
-    scoreSuccessful: number
-    scoreUnsuccessful: number
-    gameProcessed: boolean
+    count: number;
+    scoreSuccessful: number;
+    scoreUnsuccessful: number;
+    gameProcessed: boolean;
   }
 
   interface ComponentCustomProperties {
-    $store: Store<State>
+    $store: Store<State>;
   }
 }

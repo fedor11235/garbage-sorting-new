@@ -1,79 +1,97 @@
 <template>
   <div class="scene">
     <div class="game">
-      <div  class="game__title">Выберите правильный бак для сортировки мусора</div>
+      <div class="game__title">
+        Выберите правильный бак для сортировки мусора
+      </div>
       <ScoreLabel class="game__successful-attempts" type="ok" />
       <ScoreLabel class="game__unsuccessful-attempts" type="no" />
-        <StopwatchItem  class="game__stopwatch"/>
+      <TimerItem class="game__stopwatch" />
       <div class="wasteboxes">
         <div>
-          <div class="wasteboxes__title wasteboxes__title_yellow">Вторсырье</div>
-          <WasteItem type="yellow" @item-drop="handlerItemDrop" :trash-active="trashActive" />
+          <div class="wasteboxes__title wasteboxes__title_yellow">
+            Вторсырье
+          </div>
+          <WasteItem
+            type="yellow"
+            @item-drop="handlerItemDrop"
+            :trash-active="trashActive"
+          />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_green">Смешанные</div>
-          <WasteItem type="green" @item-drop="handlerItemDrop" :trash-active="trashActive" />
+          <WasteItem
+            type="green"
+            @item-drop="handlerItemDrop"
+            :trash-active="trashActive"
+          />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_blue">Бытовые</div>
-          <WasteItem type="blue" @item-drop="handlerItemDrop" :trash-active="trashActive" />
+          <WasteItem
+            type="blue"
+            @item-drop="handlerItemDrop"
+            :trash-active="trashActive"
+          />
         </div>
         <div>
           <div class="wasteboxes__title wasteboxes__title_red">Опасные</div>
-          <WasteItem type="red" @item-drop="handlerItemDrop" :trash-active="trashActive" />
+          <WasteItem
+            type="red"
+            @item-drop="handlerItemDrop"
+            :trash-active="trashActive"
+          />
         </div>
       </div>
-      <TrashItem :key="renderComponent" :typeDrop="typeDrop" ref="trashItem" @trash-active="(e: any) => trashActive = e"/>
+      <TrashItem
+        :key="renderComponent"
+        :typeDrop="typeDrop"
+        ref="trashItem"
+        @trash-active="(e: boolean) => trashActive = e"
+      />
     </div>
-    <!-- <GameModal v-if="!$store.state.gameProcessed" /> -->
+    <GameModal v-if="!gameProcessed" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import WasteItem from "@/components/WasteItem.vue";
 import ScoreLabel from "@/components/ScoreLabel.vue";
-import StopwatchItem from "@/components/StopwatchItem.vue";
+import TimerItem from "@/components/TimerItem.vue";
 import GameModal from "@/components/GameModal.vue";
 import TrashItem from "@/components/TrashItem.vue";
+import TypeDrop from "@/models/TypeDrop";
+
 export default defineComponent({
   components: {
     WasteItem,
     ScoreLabel,
-    StopwatchItem,
+    TimerItem,
     GameModal,
-    TrashItem
+    TrashItem,
   },
   data() {
     return {
-      trashType: ['yellow', 'green', 'blue', 'red'],
-      timeDrop: 600,
-      typeDrop: {} as {color: String, type: String},
+      typeDrop: {} as TypeDrop,
       renderComponent: 0,
-      trashActive: false
+      trashActive: false,
     };
   },
   computed: {
-    ...mapState(["score", "gameProcessed"]),
-  },
-  mounted() {
-    // this.generationGarbage()
+    ...mapState(["gameProcessed", "timeDrop"]),
   },
   methods: {
-    ...mapMutations({
-      scoreIncrease: "SCORE_INCREASE",
-      scoreDecrease: "SCORE_DECREASE",
-    }),
-    handlerItemDrop(e: any) {
-      this.typeDrop = e
+    handlerItemDrop(e: TypeDrop): void {
+      this.typeDrop = e;
       setTimeout(() => {
         this.renderComponent = this.renderComponent === 0 ? 1 : 0;
         this.typeDrop = {
-          type: '',
-          color: ''
-        }
-       }, this.timeDrop);
+          type: "",
+          color: "",
+        };
+      }, this.timeDrop);
     },
   },
 });
@@ -90,7 +108,7 @@ export default defineComponent({
 }
 .game {
   position: relative;
-  overflow:hidden;
+  overflow: hidden;
   width: 606px;
   height: 486px;
   background: white;
@@ -99,7 +117,7 @@ export default defineComponent({
 
 .game__title {
   width: 342px;
-  color:#1a2674;
+  color: #1a2674;
   font-size: 20px;
   font-weight: 600;
   text-align: center;
@@ -147,7 +165,6 @@ export default defineComponent({
   -o-transform: translate(172px, 230px);
   -moz-transform: translate(172px, 230px);
 }
-
 
 /* @keyframes drop {
   from {

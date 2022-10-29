@@ -22,9 +22,9 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -ms-user-select: none; 
-  -moz-user-select: none; 
-  -webkit-user-select: none; 
-  user-select: none; 
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
