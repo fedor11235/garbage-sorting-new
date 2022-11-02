@@ -30,13 +30,6 @@ export default createStore({
       },
     ] as Array<TrashType>,
   },
-  getters: {
-    trashRandomTypeGeneration(state): TrashType {
-      return state.trashTypes[
-        Math.floor(Math.random() * state.trashTypes.length)
-      ];
-    },
-  },
   mutations: {
     SCORE_INCREMENT_SUCCESSFUL(state) {
       state.scoreSuccessful++;

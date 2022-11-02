@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters, mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import TypeDrop from "@/models/TypeDrop";
 import TrashType from "@/models/TrashType";
 export default defineComponent({
@@ -63,7 +63,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(["timeDrop", "trashTypes"]),
-    ...mapGetters(["trashRandomTypeGeneration"]),
   },
   mounted() {
     setTimeout(() => {
@@ -77,7 +76,7 @@ export default defineComponent({
 
       this.active = true;
       this.$emit("trashActive", this.active);
-      this.typeType = this.trashRandomTypeGeneration;
+      this.typeType = this.trashRandomTypeGeneration();
     }, this.timeStart);
   },
   methods: {
@@ -112,6 +111,11 @@ export default defineComponent({
     animationItemEnd(): void {
       this.active = true;
       this.$emit("trashActive", this.active);
+    },
+    trashRandomTypeGeneration(): TrashType {
+      return this.trashTypes[
+        Math.floor(Math.random() * this.trashTypes.length)
+      ];
     },
   },
 });
